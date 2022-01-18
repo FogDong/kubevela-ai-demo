@@ -1,0 +1,14 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: train-models-job
+spec:
+  template:
+    spec:
+      containers:
+      - name: train-container
+        imagePullPolicy: Always
+        image: ghcr.io/hongchaodeng/ai-demo:latest
+        command: ["python3", "train.py"]
+      restartPolicy: Never
+  backoffLimit: 4

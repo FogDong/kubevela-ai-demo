@@ -1,0 +1,49 @@
+# Use Logging Operator:
+#   https://banzaicloud.com/docs/one-eye/logging-operator/
+
+apiVersion: logging.banzaicloud.io/v1beta1
+kind: Output
+metadata:
+  name: s3-output
+spec:
+  s3:
+    aws_key_id:
+      valueFrom:
+        secretKeyRef:
+          name: s3-secret
+          key: awsAccessKeyId
+          namespace: default
+    aws_sec_key:
+      valueFrom:
+        secretKeyRef:
+          name: s3-secret
+          key: awsSecretAccessKey
+          namespace: default
+    s3_bucket: example-logging-bucket
+    s3_region: eu-west-1
+    path: logs/${tag}/%Y/%m/%d/
+    buffer:
+      timekey: 1m
+      timekey_wait: 10s
+      timekey_use_utc: true
+
+---
+apiVersion: logging.banzaicloud.io/v1beta1
+kind: Flow
+metadata:
+  name: ai-demo
+  namespace: default
+spec:
+  filters:
+    - parser:
+        remove_key_name_field: true
+        parse:
+          type: nginx
+    - tag_normaliser:
+        format: ${namespace_name}.${pod_name}.${container_name}
+  localOutputRefs:
+    - s3-output
+  match:
+    - select:
+        labels:
+          app: ai-demo

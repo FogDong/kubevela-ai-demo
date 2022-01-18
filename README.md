@@ -16,7 +16,7 @@
 
 注意这个例子里的下列配置跟业务代码无关，属于 render 操作生成的内容，放在这里作为示例:
 
-- Dockerfiles/
+- Dockerfiles/ and .dockerignore
 - kubernetes/
 
 
@@ -24,7 +24,7 @@ TODO:
 
 - Dockerfile
 - Build Image
-  - Github Action
+  - Github Action: https://docs.github.com/en/actions/creating-actions/creating-a-docker-container-action
 - Push Image
   - Github Registry
 - Apply application

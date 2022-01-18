@@ -1,24 +1,34 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  name: ai-demo
   labels:
-    app: my-app
+    app: ai-demo
     env: qa
-  name: my-app
-  namespace: mlops
+  annotations:
+    dev.nocalhost: |-
+      name: nocalhost-api
+      serviceType: deployment
+      containers:
+        - name: nocalhost-api
+          dev:
+            image: nocalhost-docker.pkg.coding.net/nocalhost/dev-images/golang:zsh
+            env:
+              - name: NOCALHOST_INJECT_DEV_ENV
+                value: WHATEVER
 spec:
-  replicas: 2 # Creating two PODs for our app
+  replicas: 1
   selector:
     matchLabels:
-      app: my-app
+      app: ai-demo
   template:
     metadata:
       labels:
-        app: my-app
+        app: ai-demo
         env: qa
     spec:
       containers:
-        - image: xaviervasques/my-kube-api:latest
+        - image: ghcr.io/hongchaodeng/ai-demo:latest
           name: my-kube-api
           command: ["python3", "api.py" ]
           ports:
