@@ -24,7 +24,7 @@ TODO:
 
 - Dockerfile
 - Build Image
-  - Github Action: https://docs.github.com/en/actions/creating-actions/creating-a-docker-container-action
+  - Github Action
 - Push Image
   - Github Registry
 - Apply application
