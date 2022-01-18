@@ -6,11 +6,7 @@ build:
     parameters:
       image: ghcr.io/hongchaodeng/ai-demo:latest
       pre-build:
-        - mkdir my-model
-      env:
-        - MODEL_DIR=${WORKSPACE}/my-model
-        - MODEL_FILE_LDA=clf_lda.joblib
-        - MODEL_FILE_NN=clf_nn.joblib
+        - mkdir /workspace/my-model
 
 deploy:
   train-model:
@@ -19,6 +15,10 @@ deploy:
       cmd:
         - python3
         - train.py
+      env:
+        - MODEL_DIR=/workspace/my-model
+        - MODEL_FILE_LDA=clf_lda.joblib
+        - MODEL_FILE_NN=clf_nn.joblib
 
   serve-model:
     stack: online-service
@@ -28,3 +28,7 @@ deploy:
       cmd:
         - python3
         - api.py
+      env:
+        - MODEL_DIR=/workspace/my-model
+        - MODEL_FILE_LDA=clf_lda.joblib
+        - MODEL_FILE_NN=clf_nn.joblib

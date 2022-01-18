@@ -2,10 +2,7 @@ FROM jupyter/scipy-notebook
 
 WORKDIR /workspace
 
-RUN mkdir my-model
-ENV MODEL_DIR=/workspace/my-model
-ENV MODEL_FILE_LDA=clf_lda.joblib
-ENV MODEL_FILE_NN=clf_nn.joblib
+RUN mkdir /workspace/my-model
 
 COPY requirements.txt ./requirements.txt
 RUN pip install -r requirements.txt 

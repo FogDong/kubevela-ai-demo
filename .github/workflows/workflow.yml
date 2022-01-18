@@ -4,10 +4,7 @@ on:
   push:
     # Publish `main` as Docker `latest` image.
     branches:
-      - main
-    # Publish `v1.2.3` tags as releases.
-    tags:
-      - v*
+      - "release"
   # Run tests for any PRs.
   pull_request:
 
@@ -17,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       # Set the Docker registry to push to.
-      IMAGE: ghcr.io/fogdong/ai-demo
+      IMAGE: ghcr.io/hongchaodeng/ai-demo
 
     steps:
     - name: Generate build ID
@@ -38,7 +35,7 @@ jobs:
       with:
           registry: ghcr.io
           username: ${{ secrets.GHCR_USERNAME }}
-          password: ${{ secrets.GHCR_TOKEN }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Build and publish container image with tag
       uses: docker/build-push-action@v2
