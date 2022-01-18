@@ -1,0 +1,23 @@
+name: my-app
+image: my-repo/my-image:v1
+build:
+  prepare: |-
+    mkdir my-model
+  scipy:
+    version: v1.2
+services:
+  inference:
+    cmd:
+      - python3
+      - api.py
+  mysql:
+    version: v3.9
+jobs:
+  training:
+    cmd:
+      - python3
+      - train.py
+env:
+  - MODEL_DIR=/home/jovyan/my-model
+  - MODEL_FILE_LDA=clf_lda.joblib
+  - MODEL_FILE_NN=clf_nn.joblib

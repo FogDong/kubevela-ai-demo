@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: my-app
+    env: qa
+  name: my-app
+  namespace: mlops
+spec:
+  replicas: 2 # Creating two PODs for our app
+  selector:
+    matchLabels:
+      app: my-app
+  template:
+    metadata:
+      labels:
+        app: my-app
+        env: qa
+    spec:
+      containers:
+        - image: xaviervasques/my-kube-api:latest
+          name: my-kube-api
+          command: ["python3", "api.py" ]
+          ports:
+          - containerPort: 5000
+            protocol: TCP
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "250m"
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
