@@ -5,7 +5,7 @@
 对于 AI 应用开发者来说，操作流程如下：
 
 - 写业务逻辑 code: train.py + api.py
-- 配置下 [app.yaml](./app.yaml) 和 [Github action](./workflow.yml)
+- 配置下 [app.yaml](./app.yaml) 和 [Dockerfile](./Dockerfile)
 - git push，触发一系列 render & build & deploy 操作
 - 最后训练完成、推理上线
 - 在 UI 上展示出：
@@ -16,7 +16,7 @@
 
 注意这个例子里的下列配置跟业务代码无关，属于 render 操作生成的内容，放在这里作为示例:
 
-- Dockerfiles/ and .dockerignore
+- .github/
 - kubernetes/
 
 

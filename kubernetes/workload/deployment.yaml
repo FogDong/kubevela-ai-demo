@@ -12,10 +12,7 @@ metadata:
       containers:
         - name: nocalhost-api
           dev:
-            image: nocalhost-docker.pkg.coding.net/nocalhost/dev-images/golang:zsh
-            env:
-              - name: NOCALHOST_INJECT_DEV_ENV
-                value: WHATEVER
+            image: ghcr.io/hongchaodeng/ai-demo
 spec:
   replicas: 1
   selector:
@@ -28,8 +25,8 @@ spec:
         env: qa
     spec:
       containers:
-        - image: ghcr.io/hongchaodeng/ai-demo:latest
-          name: my-kube-api
+        - image: ghcr.io/hongchaodeng/ai-demo
+          name: ai-demo
           command: ["python3", "api.py" ]
           ports:
           - containerPort: 5000

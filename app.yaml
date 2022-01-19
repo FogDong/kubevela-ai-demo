@@ -1,34 +1,28 @@
 name: ai-demo
 
 build:
-  scipy:
-    stack: scipy-builder
+  build-image:
+    stack: docker
     parameters:
-      image: ghcr.io/hongchaodeng/ai-demo:latest
-      pre-build:
-        - mkdir /workspace/my-model
+      image: ghcr.io/hongchaodeng/ai-demo
 
 deploy:
   train-model:
     stack: batch-job
     parameters:
-      cmd:
-        - python3
-        - train.py
-      env:
-        - MODEL_DIR=/workspace/my-model
-        - MODEL_FILE_LDA=clf_lda.joblib
-        - MODEL_FILE_NN=clf_nn.joblib
+      container:
+        image: $(build.build-image.outputs.image)
+        cmd:
+          - python3
+          - train.py
 
   serve-model:
-    stack: online-service
+    stack: web-api
     dependsOn:
       - train-model
     parameters:
-      cmd:
-        - python3
-        - api.py
-      env:
-        - MODEL_DIR=/workspace/my-model
-        - MODEL_FILE_LDA=clf_lda.joblib
-        - MODEL_FILE_NN=clf_nn.joblib
+      container:
+        image: $(build.build-image.outputs.image)
+        cmd:
+          - python3
+          - api.py

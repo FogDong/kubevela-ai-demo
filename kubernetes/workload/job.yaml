@@ -8,7 +8,7 @@ spec:
       containers:
       - name: train-container
         imagePullPolicy: Always
-        image: ghcr.io/hongchaodeng/ai-demo:latest
+        image: ghcr.io/hongchaodeng/ai-demo
         command: ["python3", "train.py"]
       restartPolicy: Never
   backoffLimit: 4
