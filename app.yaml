@@ -1,28 +1,32 @@
-name: ai-demo
+metadata:
+  name: ai-demo
+  namespace: default
 
-build:
-  build-image:
-    stack: docker
-    parameters:
-      image: ghcr.io/hongchaodeng/ai-demo
+trainModel:
+  container:
+    image: ghcr.io/hongchaodeng/ai-demo
+    cmd:
+      - python3
+      - train.py
+  backoffLimit: 4
 
-deploy:
-  train-model:
-    stack: batch-job
-    parameters:
-      container:
-        image: $(build.build-image.outputs.image)
-        cmd:
-          - python3
-          - train.py
+serveModel:
+  container:
+    image: ghcr.io/hongchaodeng/ai-demo
+    cmd:
+      - python3
+      - api.py
+  autoscaling:
+    min: 1
+    max: 3
+  monitoring:
+    groups:
+      - name: example
+        rules:
+          - alert: APIHighRequestLatency
+            expr: api_http_request_latencies_second{quantile="0.5"} > 1
+            for: 10m
+            annotations:
+              summary: "High request latency on {{ $labels.instance }}"
+              description: "{{ $labels.instance }} has a median request latency above 1s (current value: {{ $value }}s)"
 
-  serve-model:
-    stack: web-api
-    dependsOn:
-      - train-model
-    parameters:
-      container:
-        image: $(build.build-image.outputs.image)
-        cmd:
-          - python3
-          - api.py

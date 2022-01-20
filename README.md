@@ -18,16 +18,3 @@
 
 - .github/
 - kubernetes/
-
-
-TODO:
-
-- Dockerfile
-- Build Image
-  - Github Action: https://docs.github.com/en/actions/creating-actions/creating-a-docker-container-action
-- Push Image
-  - Github Registry
-- Apply application
-  - Apply Definitions
-  - Apply Train Component
-  - Apply Serve Component
