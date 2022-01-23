@@ -2,6 +2,17 @@ metadata:
   name: ai-demo
   namespace: default
 
+# build:
+#   source: ./src
+#   setup:
+#     mkdir my-model
+#   env:
+#     MODEL_DIR: /home/jovyan/my-model
+#     MODEL_FILE_LDA: clf_lda.joblib
+#     MODEL_FILE_NN: clf_nn.joblib
+#   command: |
+#     ppip install -r requirements.txt 
+
 trainModel:
   container:
     image: ghcr.io/hongchaodeng/ai-demo

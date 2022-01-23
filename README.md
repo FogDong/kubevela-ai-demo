@@ -5,16 +5,70 @@
 对于 AI 应用开发者来说，操作流程如下：
 
 - 写业务逻辑 code: train.py + api.py
-- 配置下 [app.yaml](./app.yaml) 和 [Dockerfile](./Dockerfile)
-- git push，触发一系列 render & build & deploy 操作
-- 最后训练完成、推理上线
-- 在 UI 上展示出：
-  - 生成的配置 (Dockerfiles, Kubernetes)
-  - CI/CD pipeline (build -> train -> serve)
-  - 训练任务
-  - 推理服务
+- 配置下 [app.yaml](./app.yaml)
+- 剩下的一键 `dagger up` 即可，包括
+  - build & deploy orchestration
+  - infrastructure resources rendering
 
-注意这个例子里的下列配置跟业务代码无关，属于 render 操作生成的内容，放在这里作为示例:
+## Quickstart
 
-- .github/
-- kubernetes/
+If you have not setup Dagger environment, run
+```
+dagger init
+dagger new test -p plans/ml
+```
+
+Initialize parameters:
+
+```
+dagger input yaml parameters -f app.yaml
+```
+
+Run:
+```
+dagger up
+dagger query outputs
+```
+
+## Add a new capability
+
+The [monitoring.cue](./plans/ml/monitoring.cue) is an example to add a new capability to an existing definition:
+
+```go
+package ml
+
+// This will register the new capability and expose it to users
+parameters: serveModel: monitoring: {
+  groups: [...#monitorGroup]
+}
+
+#monitorGroup: {
+  name: string
+  rules: [...#monitorRule]
+}
+
+#monitorRule: {
+  alert: string
+  expr: string
+  for: string
+  annotations: [string]: string
+}
+```
+
+Then you can use the capability in `app.yaml`:
+
+```yaml
+serveModel:
+  ...
+
+  monitoring:
+    groups:
+      - name: example
+        rules:
+          - alert: APIHighRequestLatency
+            expr: api_http_request_latencies_second{quantile="0.5"} > 1
+            for: 10m
+            annotations:
+              summary: "High request latency on {{ $labels.instance }}"
+              description: "{{ $labels.instance }} has a median request latency above 1s (current value: {{ $value }}s)"
+```
