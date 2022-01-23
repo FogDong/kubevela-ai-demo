@@ -72,3 +72,11 @@ serveModel:
               summary: "High request latency on {{ $labels.instance }}"
               description: "{{ $labels.instance }} has a median request latency above 1s (current value: {{ $value }}s)"
 ```
+
+
+TODO:
+
+- Dagger -> KubeVela App + Defs:
+  - Deployment
+  - Ingress + Service
+  - Monitoring

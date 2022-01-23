@@ -3,15 +3,9 @@ metadata:
   namespace: default
 
 # build:
-#   source: ./src
-#   setup:
-#     mkdir my-model
-#   env:
-#     MODEL_DIR: /home/jovyan/my-model
-#     MODEL_FILE_LDA: clf_lda.joblib
-#     MODEL_FILE_NN: clf_nn.joblib
-#   command: |
-#     ppip install -r requirements.txt 
+#   source: ./
+#   push:
+#     target: ghcr.io/hongchaodeng/ai-demo
 
 trainModel:
   container:
@@ -22,11 +16,13 @@ trainModel:
   backoffLimit: 4
 
 serveModel:
+  env: qa
   container:
     image: ghcr.io/hongchaodeng/ai-demo
     cmd:
       - python3
       - api.py
+    port: 5000
   autoscaling:
     min: 1
     max: 3
