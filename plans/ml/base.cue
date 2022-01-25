@@ -4,6 +4,9 @@ import (
 	"alpha.dagger.io/dagger"
 )
 
+// set with `dagger input text kubeconfig -f "$HOME"/.kube/config -e kube`
+kubeconfig: {string} @dagger(input)
+
 parameters: {
 	metadata: {
 		name:      string & dagger.#Input
@@ -18,7 +21,7 @@ parameters: {
 	//    username: string
 	//    secret:   string
 	//   } | *null
-	//  } @dagger(input)
+	//  }
 	//  image:    docker.#Build & {
 	//   source: build.source
 	//  }
@@ -58,22 +61,20 @@ parameters: {
 	max: int | *0
 }
 
-generateResource: {
-	[ApiVersion=_]: [Kind=_]: [Namespace=_]: [Name=_]: {
-		apiVersion: ApiVersion
-		kind:       Kind
-		metadata: {
-			name:      Name
-			namespace: Namespace
-			labels: {
-				app: Name
-				...
-			}
+generateResource: [ApiVersion=_]: [Kind=_]: [Namespace=_]: [Name=_]: {
+	apiVersion: ApiVersion
+	kind:       Kind
+	metadata: {
+		name:      Name
+		namespace: Namespace
+		labels: {
+			app: Name
 			...
 		}
 		...
 	}
-} @dagger(output)
+	...
+}
 
 generateResource: "apps/v1": Deployment: "\(parameters.metadata.namespace)": "\(parameters.metadata.name)": {
 	metadata: {
@@ -121,7 +122,7 @@ generateResource: "apps/v1": Deployment: "\(parameters.metadata.namespace)": "\(
 generateResource: v1: Service: "\(parameters.metadata.namespace)": "\(parameters.metadata.name)": {
 	metadata: labels: env: parameters.serveModel.env
 	spec: {
-		type: "LoadBalancer"
+		type: "ClusterIP"
 		ports: [{
 			port:       parameters.serveModel.container.port
 			targetPort: parameters.serveModel.container.port
