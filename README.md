@@ -74,9 +74,3 @@ serveModel:
 ```
 
 
-TODO:
-
-- Dagger -> KubeVela App + Defs:
-  - Deployment
-  - Ingress + Service
-  - Monitoring
