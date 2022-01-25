@@ -27,7 +27,7 @@ dagger input yaml parameters -f app.yaml
 Run:
 ```
 dagger up
-dagger query outputs
+dagger query resources
 ```
 
 ## Add a new capability

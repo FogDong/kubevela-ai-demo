@@ -58,8 +58,8 @@ parameters: {
 	max: int | *0
 }
 
-outputs: [ApiVersion=_]: [Kind=_]: [Namespace=_]: {
-	[Name=_]: {
+generateResource: {
+	[ApiVersion=_]: [Kind=_]: [Namespace=_]: [Name=_]: {
 		apiVersion: ApiVersion
 		kind:       Kind
 		metadata: {
@@ -72,10 +72,10 @@ outputs: [ApiVersion=_]: [Kind=_]: [Namespace=_]: {
 			...
 		}
 		...
-	} @dagger(output)
-}
+	}
+} @dagger(output)
 
-outputs: "apps/v1": Deployment: "\(parameters.metadata.namespace)": "\(parameters.metadata.name)": {
+generateResource: "apps/v1": Deployment: "\(parameters.metadata.namespace)": "\(parameters.metadata.name)": {
 	metadata: {
 		labels: env:                  parameters.serveModel.env
 		annotations: "dev.nocalhost": """
@@ -118,7 +118,7 @@ outputs: "apps/v1": Deployment: "\(parameters.metadata.namespace)": "\(parameter
 	}
 }
 
-outputs: v1: Service: "\(parameters.metadata.namespace)": "\(parameters.metadata.name)": {
+generateResource: v1: Service: "\(parameters.metadata.namespace)": "\(parameters.metadata.name)": {
 	metadata: labels: env: parameters.serveModel.env
 	spec: {
 		type: "LoadBalancer"
@@ -130,7 +130,7 @@ outputs: v1: Service: "\(parameters.metadata.namespace)": "\(parameters.metadata
 	}
 }
 
-outputs: "networking.k8s.io/v1": Ingress: "\(parameters.metadata.namespace)": "\(parameters.metadata.name)": {
+generateResource: "networking.k8s.io/v1": Ingress: "\(parameters.metadata.namespace)": "\(parameters.metadata.name)": {
 	metadata: {
 		labels: env: parameters.serveModel.env
 
@@ -147,3 +147,15 @@ outputs: "networking.k8s.io/v1": Ingress: "\(parameters.metadata.namespace)": "\
 		}]
 	}]
 }
+
+resources: [
+	for _, v1 in generateResource {
+		for _, v2 in v1 {
+			for _, v3 in v2 {
+				for _, v4 in v3 {
+					v4
+				}
+			}
+		}
+	},
+]

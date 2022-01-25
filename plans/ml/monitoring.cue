@@ -15,7 +15,7 @@ parameters: serveModel: monitoring: groups: [...#monitorGroup]
 	annotations: [string]: string
 }
 
-outputs: "monitoring.coreos.com/v1": ServiceMonitor: "\(parameters.metadata.namespace)": "\(parameters.metadata.name)": {
+generateResource: "monitoring.coreos.com/v1": ServiceMonitor: "\(parameters.metadata.namespace)": "\(parameters.metadata.name)": {
 	metadata: labels: env: parameters.serveModel.env
 	spec: {
 		selector: matchLabels: app: parameters.metadata.name
