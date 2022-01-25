@@ -20,7 +20,7 @@ generateResource: "monitoring.coreos.com/v1": ServiceMonitor: "\(parameters.meta
 	spec: {
 		selector: matchLabels: app: parameters.metadata.name
 		endpoints: [{
-			port: parameters.serveModel.container.port
+			targetPort: parameters.serveModel.container.port
 		}]
 	}
 }
