@@ -1,0 +1,29 @@
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: serving
+spec:
+  components:
+    - name: serving
+      type: webservice
+      properties:
+        image: ghcr.io/hongchaodeng/ai-demo
+        cmd:
+          - python3
+          - train.py
+        exposeType: LoadBalancer
+        ports:
+          - port: 5000
+            expose: true
+        cpu: 250m
+        memory: 64Mi
+      traits:
+        - type: nocalhost
+          properties:
+            port: 5000
+            image: python
+        - type: cpuscaler
+          properties:
+            min: 1
+            max: 3
+            cpuUtil: 80

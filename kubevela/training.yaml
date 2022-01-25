@@ -1,0 +1,13 @@
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: training
+spec:
+  components:
+    - name: training
+      type: task
+      properties:
+        image: ghcr.io/hongchaodeng/ai-demo
+        cmd:
+          - python3
+          - train.py
